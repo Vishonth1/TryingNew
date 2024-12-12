@@ -1534,59 +1534,31 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
     CAP[key] = cap
     if imdb and imdb.get('poster'):
         try:
-            if settings['auto_delete']:
-                k = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024] + links + del_msg, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
-              #  await delSticker(st)
-                await asyncio.sleep(DELETE_TIME)
-                await k.delete()
-                try:
-                    await message.delete()
-                except:
-                    pass
-            else:
-                await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024] + links + js_ads, reply_markup=InlineKeyboardMarkup(btn))                    
+            hehe =  await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024],
+                                      reply_markup=InlineKeyboardMarkup(btn))
+            if AUTO_DELETE:
+                await asyncio.sleep(AUTO_DELETE_SECONDS)
+                await hehe.delete()
+
         except (MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty):
             pic = imdb.get('poster')
             poster = pic.replace('.jpg', "._V1_UX360.jpg")
-            if settings["auto_delete"]:
-                k = await message.reply_photo(photo=poster, caption=cap[:1024] + links + js_ads, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
-                #await delSticker(st)
-                await asyncio.sleep(DELETE_TIME)
-                await k.delete()
-                try:
-                    await message.delete()
-                except:
-                    pass
-            else:
-                await message.reply_photo(photo=poster, caption=cap[:1024] + links + js_ads, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
+            hmm = await message.reply_photo(photo=poster, caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+            if AUTO_DELETE:
+                await asyncio.sleep(AUTO_DELETE_SECONDS)
+                await hmm.delete()
         except Exception as e:
-            print(e)
-            if settings["auto_delete"]:
-                #await delSticker(st)
-                try:
-                    k = await message.reply_text(cap + links + js_ads, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
-                except Exception as e:
-                    print("error", e)
-                await asyncio.sleep(DELETE_TIME)
-                await k.delete()
-                try:
-                    await message.delete()
-                except:
-                    pass
-            else:
-                await message.reply_text(cap + links + js_ads, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
+            logger.exception(e)
+            fek = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+            if AUTO_DELETE:
+                await asyncio.sleep(AUTO_DELETE_SECONDS)
+                await fek.delete()
     else:
-        k = await message.reply_text(text=cap + links + js_ads, disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(btn), parse_mode=enums.ParseMode.HTML, reply_to_message_id=message.id)
-       # await delSticker(st)
-        if settings['auto_delete']:
-          #  await delSticker(st)
-            await asyncio.sleep(DELETE_TIME)
-            await k.delete()
-            try:
-                await message.delete()
-            except:
-                pass
-    return            
+        fuk = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+        if AUTO_DELETE:
+            await asyncio.sleep(AUTO_DELETE_SECONDS)
+            await fuk.delete() 
+		
 async def advantage_spell_chok(message):
     mv_id = message.id
     search = message.text
